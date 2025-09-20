@@ -1,8 +1,21 @@
 {
+  "version": 2,
   "functions": {
-    "api/*.php": {
+    "api/**/*.php": {
       "runtime": "vercel-php@0.7.4"
     }
   },
-  "routes": [{ "src": "/(.*)", "dest": "/api/index.php" }]
+  "routes": [
+    { "src": "/view_message.php", "dest": "/api/view_message.php" },
+    { "src": "/admin.php", "dest": "/api/admin.php" },
+    { "src": "/submit.php", "dest": "/api/submit.php" },
+    { "src": "/(.*)", "dest": "/api/index.php" }
+  ],
+  "env": {
+    "DB_HOST": "sql7.freesqldatabase.com",
+    "DB_PORT": "3306",
+    "DB_DATABASE": "sql7799375",
+    "DB_USERNAME": "sql7799375",
+    "DB_PASSWORD": "Rp6VN45Lxs"
+  }
 }

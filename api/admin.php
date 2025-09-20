@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$dbname     = "contacts";
+$servername = "sql7.freesqldatabase.com";
+$username   = "sql7799375";
+$password   = "Rp6VN45Lxs";
+$dbname     = "sql7799375";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
