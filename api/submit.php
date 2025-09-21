@@ -1,33 +1,20 @@
 <?php
-// Load Composer autoloader
-require __DIR__ . '/vendor/autoload.php';
+// Include PHPMailer files (manual method)
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 
-use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Load environment variables from .env
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-// Optionally validate required vars
-$dotenv->required([
-    'DB_HOST',
-    'DB_NAME',
-    'DB_USER',
-    'DB_PASS',
-    'GMAIL_USERNAME',
-    'GMAIL_APP_PASSWORD'
-])->notEmpty();
-
-// DB credentials from env
-$servername = $_ENV['DB_HOST'];
-$dbname     = $_ENV['DB_NAME'];
-$dbuser     = $_ENV['DB_USER'];
-$dbpass     = $_ENV['DB_PASS'];
+// DB credentials
+$servername = "sql7.freesqldatabase.com";
+$username   = "sql7799375";
+$password   = "Rp6VN45Lxs";
+$dbname     = "sql7799375";
 
 // Create DB connection
-$conn = new mysqli($servername, $dbuser, $dbpass, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("❌ Database connection failed: " . $conn->connect_error);
 }
@@ -56,22 +43,21 @@ if ($stmt->execute()) {
     // DB insertion successful, proceed to send email notification
     $mail = new PHPMailer(true);
     try {
-        // SMTP settings from env
+        // SMTP settings
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = $_ENV['GMAIL_USERNAME'];       // your Gmail from .env
-        $mail->Password   = $_ENV['GMAIL_APP_PASSWORD'];   // Gmail App Password from .env
+        $mail->Username   = 'ganalafiyalevi@gmail.com';   // your Gmail
+        $mail->Password   = 'yjhp wsck dtvr fvrn';    // Gmail App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
         // Recipients
-        $mail->setFrom($_ENV['GMAIL_USERNAME'], 'Your Name or Website Name'); 
-        $mail->addReplyTo($email, $name);              // so you can reply to the sender
-        $mail->addAddress($_ENV['GMAIL_USERNAME']);    // you receive the email
+        $mail->setFrom($email, $name); 
+        $mail->addAddress('ganalafiyalevi@gmail.com');   // you receive the email
 
         // Email content
-        $mail->isHTML(false);
+        $mail->isHTML(false);  // set to true if you want HTML
         $mail->Subject = $subject;
         $mail->Body    = "You received a new message from your website contact form:\n\n"
                        . "Name: $name\n"
@@ -82,6 +68,7 @@ if ($stmt->execute()) {
         $mail->send();
         echo "✅ Your message has been sent successfully!";
     } catch (Exception $e) {
+        // If sending email fails, still have DB saved
         echo "⚠️ Message saved, but email notification failed. Error: " . $mail->ErrorInfo;
     }
 } else {
@@ -91,5 +78,3 @@ if ($stmt->execute()) {
 // Clean up
 $stmt->close();
 $conn->close();
-
-?>
